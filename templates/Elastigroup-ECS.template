@@ -1,0 +1,699 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "This template creates an ECS cluster and Spotinst Elastigroup for the ECS nodes",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "ECS Configuration"
+                    },
+                    "Parameters": [
+                        "NewECS",
+                        "ECSName"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Spotinst Configuraiton"
+                    },
+                    "Parameters": [
+                        "AccountID",
+                        "AccessToken"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Elastigroup Configuration"
+                    },
+                    "Parameters": [
+                        "ElastigroupName",
+                        "ClusterOrientation",
+                        "SpotPercentage",
+                        "CapacityTarget",
+                        "CapacityMin",
+                        "CapacityMax",
+                        "VPC",
+                        "OnDemandInstanceType",
+                        "SpotInstancesType",
+                        "AvailabilityZones",
+                        "SubnetIds",
+                        "DetailedMonitoring",
+                        "KeyName",
+                        "SecurityGroupsIds",
+                        "ProductType"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "ECS AutoScaler Configuration"
+                    },
+                    "Parameters": [
+                        "AutoScaleraEnable",
+                        "AutoScalerCooldown",
+                        "AutoScalerEvaluationPeriods",
+                        "AutoScalerHeadroomUnitCount",
+                        "AutoScalerHeadroomCPU",
+                        "AutoScalerHeadroomRAM"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "ElastigroupName": {
+                    "default": "Elastigroup Name"
+                },
+                "AccessToken": {
+                    "default": "Spotint Access Token"
+                },
+                "AccountID": {
+                    "default": "Spotinst Account ID"
+                },
+                "ClusterOrientation": {
+                    "default": "Cluster Orientation"
+                },
+                "SpotPercentage": {
+                    "default": "Spot Instaces Percantage"
+                },
+                "CapacityTarget": {
+                    "default": "Instacnes Capacity Target"
+                },
+                "CapacityMin": {
+                    "default": "Instacnes Capacity Minimum"
+                },
+                "CapacityMax": {
+                    "default": "Instacnes Capacity Maximum"
+                },
+                "VPC": {
+                    "default": "VPC"
+                },
+                "OnDemandInstanceType": {
+                    "default": "On-Demand Instace Type"
+                },
+                "SpotInstancesType": {
+                    "default": "Spot Instances Type"
+                },
+                "AvailabilityZones": {
+                    "default": "Availability Zones"
+                },
+                "SubnetIds": {
+                    "default": "SubentIds"
+                },
+                "DetailedMonitoring": {
+                    "default": "Detailed Monitoring"
+                },
+                "KeyName": {
+                    "default": "Key Pair Name"
+                },
+                "SecurityGroupsIds": {
+                    "default": "Security Groups ID"
+                },
+                "ProductType": {
+                    "default": "Product Type"
+                },
+                "ECSName": {
+                    "default": "ECS Name"
+                },
+                "AutoScaleraEnable": {
+                    "default": "Enable ECS AutoScaler?"
+                },
+                "AutoScalerCooldown": {
+                    "default": "AutoScaler Cooldown"
+                },
+                "AutoScalerEvaluationPeriods": {
+                    "default": "AutoScaler Evaluation Periods"
+                },
+                "AutoScalerHeadroomUnitCount": {
+                    "default": "AutoScaler Headroom Units Count"
+                },
+                "AutoScalerHeadroomCPU": {
+                    "default": "AutoScaler Headroom CPU"
+                },
+                "AutoScalerHeadroomRAM": {
+                    "default": "AutoScaler Headroom RAM"
+                },
+                "NewECS": {
+                    "default": "New or Existing ECS Cluster?"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "ElastigroupName": {
+            "Type": "String",
+            "Description": "Provide a Name for the Elastigroup"
+        },
+        "AccessToken": {
+            "Type": "String",
+            "Description": "Provide Spotinst API Token"
+        },
+        "AccountID": {
+            "Type": "String",
+            "Description": "Provide Spotinst Account ID"
+        },
+        "ClusterOrientation": {
+            "Type": "String",
+            "AllowedValues": [
+                "balanced",
+                "availabilityOriented",
+                "costOriented"
+            ],
+            "Default": "balanced",
+            "Description": "Specify Cluster Orientation"
+        },
+        "SpotPercentage": {
+            "Type": "Number",
+            "MinValue": "0",
+            "MaxValue": "100",
+            "Default": "100",
+            "Description": "Spot Instances Percantage in the Cluster",
+            "ConstraintDescription": "Select a Number Between 0 and 100"
+        },
+        "CapacityTarget": {
+            "Type": "Number",
+            "Description": "Desired Amount of Intances in the Cluster"
+        },
+        "CapacityMin": {
+            "Type": "Number",
+            "Description": "Minimal Amount of Intances in the Cluster"
+        },
+        "CapacityMax": {
+            "Type": "Number",
+            "Description": "Maximal Amount of Intances in the Cluster"
+        },
+        "OnDemandInstanceType": {
+            "Type": "String",
+            "Default": "c4.large",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.nano",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "t2.large",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "g2.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type",
+            "Description": "Which on-demand instance type should we use to base Elastigroup upon?"
+        },
+        "SpotInstancesType": {
+            "Type": "CommaDelimitedList",
+            "Default": "c4.large,c5.large",
+            "Description": "Provide comma seperated List of Spot Instances Available to Elasticgroup"
+        },
+        "VPC": {
+            "Type": "AWS::EC2::VPC::Id",
+            "Description": "Choose VPC For the Elastigroup"
+        },
+        "AvailabilityZones": {
+            "Type": "List<AWS::EC2::AvailabilityZone::Name>",
+            "Description": "Provde Availability Zones for the Cluster"
+        },
+        "SubnetIds": {
+            "Type": "List<AWS::EC2::Subnet::Id>",
+            "Description": "Provde Subnet IDs for the Cluster (Must be from selected VPC"
+        },
+        "DetailedMonitoring": {
+            "Type": "String",
+            "AllowedValues": [
+                "True",
+                "False"
+            ],
+            "Default": "False",
+            "Description": "Allow Detailed CloudWatch Monitoring?"
+        },
+        "KeyName": {
+            "Description": "Provide of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "Must be the name of an existing EC2 KeyPair."
+        },
+        "SecurityGroupsIds": {
+            "Type": "List<AWS::EC2::SecurityGroup::Id>",
+            "Description": "Provide comma seperated list of Securtiy Group IDs"
+        },
+        "ProductType": {
+            "Type": "String",
+            "AllowedValues": [
+                "Linux/UNIX",
+                "SUSE Linux",
+                "Windows"
+            ],
+            "Default": "Linux/UNIX",
+            "Description": "Choose OS Type"
+        },
+        "ECSName": {
+            "Description": "Provide a name for the ECS Cluster (Or the existing ECS Cluster Name)",
+            "Type": "String"
+        },
+        "AutoScaleraEnable": {
+            "Description": "Would you like to Enable Spotinst's ECS AutoScaler?",
+            "Type": "String",
+            "Default": "true",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "AutoScalerCooldown": {
+            "Description": "Provide the time in seconds, between scaling activities (Ignore if not using AutoScaler)",
+            "Type": "String",
+            "Default": "180"
+        },
+        "AutoScalerEvaluationPeriods": {
+            "Description": "Provide the number of consecutive periods that should pass before scaling down (Ignore if not using AutoScaler)",
+            "Type": "String",
+            "Default": "3"
+        },
+        "AutoScalerHeadroomUnitCount": {
+            "Description": "Provide the number of Headroom units to keep available at all times (Ignore if not using AutoScaler)",
+            "Type": "String",
+            "Default": "0"
+        },
+        "AutoScalerHeadroomCPU": {
+            "Description": "Provide the amount of CPU units reserved in each Headroom unit (Ignore if not using AutoScaler)",
+            "Type": "String",
+            "Default": "0"
+        },
+        "AutoScalerHeadroomRAM": {
+            "Description": "Provide the amount in memory (in MB) reserved in each Headroom unit (Ignore if not using AutoScaler)",
+            "Type": "String",
+            "Default": "0"
+        },
+        "NewECS": {
+            "Description": "Would you like to use an existing ECS Cluster, or creatae a new one?",
+            "Type": "String",
+            "AllowedValues": [
+                "New Cluster",
+                "Existing Cluster"
+            ],
+            "Default": "New Cluster"
+        },
+        "QSS3BucketName": {
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "aws-quickstart",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
+        },
+        "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "quickstart-elastigroup-ecs/",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Type": "String"
+        }
+    },
+    "Mappings": {
+        "AWSRegionToAMI": {
+            "AMI": {
+                "AMZECSOTP": "amzn-ami-2018.03.a-amazon-ecs-optimized"
+            },
+            "us-east-2": {
+                "AMI": "ami-956e52f0"
+            },
+            "us-east-1": {
+                "AMI": "ami-5253c32d"
+            },
+            "us-west-2": {
+                "AMI": "ami-d2f489aa"
+            },
+            "us-west-1": {
+                "AMI": "ami-6b81980b"
+            },
+            "eu-west-3": {
+                "AMI": "ami-ca75c4b7"
+            },
+            "eu-west-2": {
+                "AMI": "ami-3622cf51"
+            },
+            "eu-west-1": {
+                "AMI": "ami-c91624b0"
+            },
+            "eu-central-1": {
+                "AMI": "ami-10e6c8fb"
+            },
+            "ap-northeast-2": {
+                "AMI": "ami-7c69c112"
+            },
+            "ap-northeast-1": {
+                "AMI": "ami-f3f8098c"
+            },
+            "ap-southeast-2": {
+                "AMI": "ami-bc04d5de"
+            },
+            "ap-southeast-1": {
+                "AMI": "ami-b75a6acb"
+            },
+            "ca-central-1": {
+                "AMI": "ami-da6cecbe"
+            },
+            "ap-south-1": {
+                "AMI": "ami-c7072aa8"
+            },
+            "sa-east-1": {
+                "AMI": "ami-a1e2becd"
+            }
+        }
+    },
+    "Conditions": {
+        "CreateECSCluster": {
+            "Fn::Equals": [
+                {
+                    "Ref": "NewECS"
+                },
+                "New Cluster"
+            ]
+        }
+    },
+    "Resources": {
+        "LambdaStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/copy_lambda.template"
+                },
+                "Parameters": {
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Ref": "QSS3KeyPrefix"
+                    }
+                }
+            }
+        },
+        "ECSCluster": {
+            "Condition": "CreateECSCluster",
+            "Type": "AWS::ECS::Cluster",
+            "Properties": {
+                "ClusterName": {
+                    "Ref": "ECSName"
+                }
+            }
+        },
+        "SpotinstElastigroup": {
+            "DependsOn": "LambdaStack",
+            "Type": "Custom::elasticgroup",
+            "Properties": {
+                "ServiceToken": {
+                    "Fn::GetAtt": [
+                        "LambdaStack",
+                        "Outputs.SpotinstLambda"
+                    ]
+                },
+                "accessToken": {
+                    "Ref": "AccessToken"
+                },
+                "accoundId": {
+                    "Ref": "AccountID"
+                },
+                "group": {
+                    "name": {
+                        "Ref": "ElastigroupName"
+                    },
+                    "region": {
+                        "Ref": "AWS::Region"
+                    },
+                    "strategy": {
+                        "risk": {
+                            "Ref": "SpotPercentage"
+                        },
+                        "availabilityVsCost": {
+                            "Ref": "ClusterOrientation"
+                        }
+                    },
+                    "capacity": {
+                        "target": {
+                            "Ref": "CapacityTarget"
+                        },
+                        "minimum": {
+                            "Ref": "CapacityMin"
+                        },
+                        "maximum": {
+                            "Ref": "CapacityMax"
+                        }
+                    },
+                    "scaling": {},
+                    "compute": {
+                        "instanceTypes": {
+                            "ondemand": {
+                                "Ref": "OnDemandInstanceType"
+                            },
+                            "spot": {
+                                "Ref": "SpotInstancesType"
+                            }
+                        },
+                        "subnetIds": {
+                            "Ref": "SubnetIds"
+                        },
+                        "launchSpecification": {
+                            "tags": [
+                                {
+                                    "tagKey": "Name",
+                                    "tagValue": {
+                                        "Fn::Sub": "${ECSName}-ECS-Host"
+                                    }
+                                }
+                            ],
+                            "monitoring": {
+                                "Ref": "DetailedMonitoring"
+                            },
+                            "imageId": {
+                                "Fn::FindInMap": [
+                                    "AWSRegionToAMI",
+                                    {
+                                        "Ref": "AWS::Region"
+                                    },
+                                    "AMI"
+                                ]
+                            },
+                            "keyPair": {
+                                "Ref": "KeyName"
+                            },
+                            "securityGroupIds": {
+                                "Ref": "SecurityGroupsIds"
+                            },
+                            "iamRole": {
+                                "arn": {
+                                    "Fn::GetAtt": [
+                                        "ECSInstanceProfile",
+                                        "Arn"
+                                    ]
+                                }
+                            },
+                            "userData": {
+                                "Fn::Base64": {
+                                    "Fn::Sub": [
+                                        "#!/bin/bash\necho ECS_CLUSTER=${ECSClustername} >> /etc/ecs/ecs.config",
+                                        {
+                                            "ECSClustername": {
+                                                "Ref": "ECSName"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "product": {
+                            "Ref": "ProductType"
+                        }
+                    },
+                    "scheduling": {},
+                    "thirdPartiesIntegration": {
+                        "ecs": {
+                            "clusterName": {
+                                "Ref": "ECSName"
+                            },
+                            "autoScale": {
+                                "isEnabled": {
+                                    "Ref": "AutoScaleraEnable"
+                                },
+                                "cooldown": {
+                                    "Ref": "AutoScalerCooldown"
+                                },
+                                "down": {
+                                    "evaluationPeriods": {
+                                        "Ref": "AutoScalerEvaluationPeriods"
+                                    }
+                                },
+                                "headroom": {
+                                    "cpuPerUnit": {
+                                        "Ref": "AutoScalerHeadroomCPU"
+                                    },
+                                    "memoryPerUnit": {
+                                        "Ref": "AutoScalerHeadroomRAM"
+                                    },
+                                    "numOfUnits": {
+                                        "Ref": "AutoScalerHeadroomUnitCount"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "ECSRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Path": "/",
+                "RoleName": {
+                    "Fn::Sub": "${ECSName}-ECSRole-${AWS::Region}"
+                },
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": "sts:AssumeRole",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            }
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "ecs-service",
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "ecs:CreateCluster",
+                                        "ecs:DeregisterContainerInstance",
+                                        "ecs:DiscoverPollEndpoint",
+                                        "ecs:Poll",
+                                        "ecs:RegisterContainerInstance",
+                                        "ecs:StartTelemetrySession",
+                                        "ecs:Submit*",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents",
+                                        "ecr:BatchCheckLayerAvailability",
+                                        "ecr:BatchGetImage",
+                                        "ecr:GetDownloadUrlForLayer",
+                                        "ecr:GetAuthorizationToken",
+                                        "ssm:DescribeAssociation",
+                                        "ssm:GetDeployablePatchSnapshotForInstance",
+                                        "ssm:GetDocument",
+                                        "ssm:GetManifest",
+                                        "ssm:GetParameters",
+                                        "ssm:ListAssociations",
+                                        "ssm:ListInstanceAssociations",
+                                        "ssm:PutInventory",
+                                        "ssm:PutComplianceItems",
+                                        "ssm:PutConfigurePackageResult",
+                                        "ssm:UpdateAssociationStatus",
+                                        "ssm:UpdateInstanceAssociationStatus",
+                                        "ssm:UpdateInstanceInformation",
+                                        "ec2messages:AcknowledgeMessage",
+                                        "ec2messages:DeleteMessage",
+                                        "ec2messages:FailMessage",
+                                        "ec2messages:GetEndpoint",
+                                        "ec2messages:GetMessages",
+                                        "ec2messages:SendReply",
+                                        "cloudwatch:PutMetricData",
+                                        "ec2:DescribeInstanceStatus",
+                                        "ds:CreateComputer",
+                                        "ds:DescribeDirectories",
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:DescribeLogGroups",
+                                        "logs:DescribeLogStreams",
+                                        "logs:PutLogEvents",
+                                        "s3:PutObject",
+                                        "s3:GetObject",
+                                        "s3:AbortMultipartUpload",
+                                        "s3:ListMultipartUploadParts",
+                                        "s3:ListBucket",
+                                        "s3:ListBucketMultipartUploads"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "ECSInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "ECSRole"
+                    }
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "Cluster": {
+            "Description": "A reference to the ECS cluster",
+            "Value": {
+                "Ref": "ECSName"
+            }
+        }
+    }
+}
