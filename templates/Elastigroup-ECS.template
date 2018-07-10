@@ -465,7 +465,7 @@
                 "accessToken": {
                     "Ref": "AccessToken"
                 },
-                "accoundId": {
+                "accountId": {
                     "Ref": "AccountID"
                 },
                 "group": {
