@@ -6,7 +6,7 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "Availability Zone Configuration"
+                        "default": "Availability Zone configuration"
                     },
                     "Parameters": [
                         "AvailabilityZones",
@@ -15,7 +15,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Network Configuration"
+                        "default": "Network configuration"
                     },
                     "Parameters": [
                         "VPCCIDR",
@@ -33,7 +33,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Amazon EC2 Configuration"
+                        "default": "Amazon EC2 configuration"
                     },
                     "Parameters": [
                         "KeyPairName",
@@ -43,7 +43,7 @@
                 },
                 {
                     "Label": {
-                        "default": "ECS Configuration"
+                        "default": "ECS configuration"
                     },
                     "Parameters": [
                         "NewECS",
@@ -52,7 +52,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Spotinst Configuraiton"
+                        "default": "Spotinst configuraiton"
                     },
                     "Parameters": [
                         "AccountID",
@@ -61,7 +61,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Elastigroup Configuration"
+                        "default": "Elastigroup configuration"
                     },
                     "Parameters": [
                         "ElastigroupName",
@@ -79,7 +79,7 @@
                 },
                 {
                     "Label": {
-                        "default": "ECS AutoScaler Configuration"
+                        "default": "ECS AutoScaler configuration"
                     },
                     "Parameters": [
                         "AutoScaleraEnable",
@@ -92,7 +92,7 @@
                 },
                 {
                     "Label": {
-                        "default": "AWS Quick Start Configuration"
+                        "default": "AWS Quick Start configuration"
                     },
                     "Parameters": [
                         "QSS3BucketName",
@@ -198,7 +198,7 @@
                     "default": "ECS Name"
                 },
                 "AutoScaleraEnable": {
-                    "default": "Enable ECS AutoScaler?"
+                    "default": "Turn on ECS AutoScaler"
                 },
                 "AutoScalerCooldown": {
                     "default": "AutoScaler Cooldown"
@@ -216,7 +216,7 @@
                     "default": "AutoScaler Headroom RAM"
                 },
                 "NewECS": {
-                    "default": "New or Existing ECS Cluster?"
+                    "default": "New or Existing ECS Cluster"
                 }
             }
         }
@@ -370,15 +370,15 @@
         },
         "ElastigroupName": {
             "Type": "String",
-            "Description": "Provide a Name for the Elastigroup"
+            "Description": "Name for the Elastigroup"
         },
         "AccessToken": {
             "Type": "String",
-            "Description": "Provide Spotinst API Token"
+            "Description": "Spotinst API Token"
         },
         "AccountID": {
             "Type": "String",
-            "Description": "Provide Spotinst Account ID"
+            "Description": "Spotinst Account ID"
         },
         "ClusterOrientation": {
             "Type": "String",
@@ -388,14 +388,14 @@
                 "costOriented"
             ],
             "Default": "balanced",
-            "Description": "Specify Cluster Orientation"
+            "Description": "Cluster Orientation"
         },
         "SpotPercentage": {
             "Type": "Number",
             "MinValue": "0",
             "MaxValue": "100",
             "Default": "100",
-            "Description": "Spot Instances Percantage in the Cluster",
+            "Description": "SThe Percantage of Spot Instances in the Cluster",
             "ConstraintDescription": "Select a Number Between 0 and 100"
         },
         "CapacityTarget": {
@@ -470,12 +470,12 @@
                 "cg1.4xlarge"
             ],
             "ConstraintDescription": "must be a valid EC2 instance type",
-            "Description": "Which on-demand instance type should we use to base Elastigroup upon?"
+            "Description": "On-demand instance type should we use to base Elastigroup upon?"
         },
         "SpotInstancesType": {
             "Type": "CommaDelimitedList",
             "Default": "c4.large,c5.large",
-            "Description": "Provide comma seperated List of Spot Instances Available to Elasticgroup"
+            "Description": "A comma seperated List of Spot Instances Available to Elasticgroup"
         },
         "DetailedMonitoring": {
             "Type": "String",
@@ -484,7 +484,7 @@
                 "False"
             ],
             "Default": "False",
-            "Description": "Allow Detailed CloudWatch Monitoring?"
+            "Description": "Choose No to disabl eDetailed CloudWatch Monitoring"
         },
         "ProductType": {
             "Type": "String",
@@ -494,14 +494,14 @@
                 "Windows"
             ],
             "Default": "Linux/UNIX",
-            "Description": "Choose OS Type"
+            "Description": "The OS Type for the instances"
         },
         "ECSName": {
-            "Description": "Provide a name for the ECS Cluster (Or the existing ECS Cluster Name)",
+            "Description": "A name for the ECS Cluster (Or the existing ECS Cluster Name)",
             "Type": "String"
         },
         "AutoScaleraEnable": {
-            "Description": "Would you like to Enable Spotinst's ECS AutoScaler?",
+            "Description": "Choose No to disable Spotinst's ECS AutoScaler",
             "Type": "String",
             "Default": "true",
             "AllowedValues": [
@@ -510,32 +510,32 @@
             ]
         },
         "AutoScalerCooldown": {
-            "Description": "Provide the time in seconds, between scaling activities (Ignore if not using AutoScaler)",
+            "Description": "The time in seconds, between scaling activities (Ignore if not using AutoScaler)",
             "Type": "String",
             "Default": "180"
         },
         "AutoScalerEvaluationPeriods": {
-            "Description": "Provide the number of consecutive periods that should pass before scaling down (Ignore if not using AutoScaler)",
+            "Description": "The number of consecutive periods that should pass before scaling down (Ignore if not using AutoScaler)",
             "Type": "String",
             "Default": "3"
         },
         "AutoScalerHeadroomUnitCount": {
-            "Description": "Provide the number of Headroom units to keep available at all times (Ignore if not using AutoScaler)",
+            "Description": "The number of Headroom units to keep available at all times (Ignore if not using AutoScaler)",
             "Type": "String",
             "Default": "0"
         },
         "AutoScalerHeadroomCPU": {
-            "Description": "Provide the amount of CPU units reserved in each Headroom unit (Ignore if not using AutoScaler)",
+            "Description": "The amount of CPU units reserved in each Headroom unit (Ignore if not using AutoScaler)",
             "Type": "String",
             "Default": "0"
         },
         "AutoScalerHeadroomRAM": {
-            "Description": "Provide the amount in memory (in MB) reserved in each Headroom unit (Ignore if not using AutoScaler)",
+            "Description": "The amount in memory (in MB) reserved in each Headroom unit (Ignore if not using AutoScaler)",
             "Type": "String",
             "Default": "0"
         },
         "NewECS": {
-            "Description": "Would you like to use an existing ECS Cluster, or creatae a new one?",
+            "Description": "Use an existing ECS Cluster or creatae a new one",
             "Type": "String",
             "AllowedValues": [
                 "New Cluster",
