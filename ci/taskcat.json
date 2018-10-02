@@ -28,10 +28,6 @@
         "ParameterValue": "$[taskcat_autobucket]"
     },
     {
-        "ParameterKey": "S3BucketName",
-        "ParameterValue": "$[taskcat_autobucket]"
-    },
-    {
         "ParameterKey": "RemoteAccessCIDR",
         "ParameterValue": "0.0.0.0/0"
     },
