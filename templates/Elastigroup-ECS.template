@@ -49,7 +49,7 @@
                         "default": "ECS AutoScaler configuration"
                     },
                     "Parameters": [
-                        "AutoScaleraEnable",
+                        "AutoScalerEnable",
                         "AutoScalerCooldown",
                         "AutoScalerEvaluationPeriods",
                         "AutoScalerHeadroomUnitCount",
@@ -122,7 +122,7 @@
                 "ECSName": {
                     "default": "ECS Name"
                 },
-                "AutoScaleraEnable": {
+                "AutoScalerEnable": {
                     "default": "Turn on ECS AutoScaler"
                 },
                 "AutoScalerCooldown": {
@@ -306,7 +306,7 @@
             "Description": "A name for the ECS Cluster (Or the existing ECS Cluster Name)",
             "Type": "String"
         },
-        "AutoScaleraEnable": {
+        "AutoScalerEnable": {
             "Description": "Choose No to disable Spotinst's ECS AutoScaler",
             "Type": "String",
             "Default": "true",
@@ -567,7 +567,7 @@
                             },
                             "autoScale": {
                                 "isEnabled": {
-                                    "Ref": "AutoScaleraEnable"
+                                    "Ref": "AutoScalerEnable"
                                 },
                                 "cooldown": {
                                     "Ref": "AutoScalerCooldown"
