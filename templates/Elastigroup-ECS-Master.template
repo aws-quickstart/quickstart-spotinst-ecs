@@ -151,9 +151,6 @@
                 "QSS3KeyPrefix": {
                     "default": "Quick Start S3 Key Prefix"
                 },
-                "S3BucketName": {
-                    "default": "S3 Bucket Name"
-                },
                 "RemoteAccessCIDR": {
                     "default": "Allowed Bastion External Access CIDR"
                 },
@@ -359,12 +356,6 @@
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
             "Description": "The CIDR IP range that is permitted to access the bastions. We recommend that you set this value to a trusted IP range.",
-            "Type": "String"
-        },
-        "S3BucketName": {
-            "AllowedPattern": "^[a-z0-9][a-z0-9-.]*$",
-            "Default": "type-unique-value-here-in-lowercase",
-            "Description": "Name of the S3 bucket that will be created for your workload to store data. Enter a unique name that does not include uppercase characters.",
             "Type": "String"
         },
         "ElastigroupName": {
