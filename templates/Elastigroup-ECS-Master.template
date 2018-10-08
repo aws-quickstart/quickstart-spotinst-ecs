@@ -158,7 +158,7 @@
                     "default": "Elastigroup name"
                 },
                 "AccessToken": {
-                    "default": "Spotint Access Token"
+                    "default": "Spotinst Access Token"
                 },
                 "AccountID": {
                     "default": "Spotinst Account ID"
