@@ -1,9 +1,16 @@
 # quickstart-spotinst-elastigroup-ecs
+## Spotinst Elastigroup for Amazon ECS on the AWS Cloud
 
-This Quick Start creates a Spotinst Elastigroup and configures it as the underlying infrastructure for an Amazon ECS cluster. Spotinst Elastigroup is an intelligent cluster management platform that lets you save up to 80% on your compute costs while maintaining 100% availability. Spotinst Elastigroup maintains spot instances as the underlying infrastructure for your ECS cluster, while making sure that your ECS cluster is always available by leveraging predictive algorithms and smart resource allocation. 
+This Quick Start sets up an AWS architecture for Spotinst Elastigroup for Amazon Elastic Container Service (Amazon ECS) and deploys it into your AWS account in about 7 minutes.
 
-Spotinst Elastigroup’s ECS autoscaler strips away any need to provision, manage, or scale your infrastructure. Moreover, the Elastigroup ECS autoscaler constantly monitors CPU, Memory and port availability, scaling your cluster up to accommodate for incoming tasks, and scaling it down when instances are underutilized. Finally, the ECS autoscaler lets you define and customize the desired “headroom” for your ECS cluster, making sure that your application always has enough capacity provisioned to handle spikes in traffic.
+Spotinst Elastigroup is an application scaling service. Similar to Amazon Elastic Compute Cloud (Amazon EC2) Auto Scaling groups, Spotinst Elastigroup is designed to optimize performance and costs by leveraging Spot Instances combined with On-Demand and Reserved Instances.
 
+Using a combination of automated Spot Instance management and the variety of instance sizes, the Spotinst Elastigroup autoscaler scales according to the task resource requirements, instead of cluster resource thresholds, and achieves over 90% resource utilization while keeping your cluster resources as defragmented as possible.
 
+This Quick Start uses AWS CloudFormation templates to deploy Spotinst Elastigroup for Amazon ECS into a virtual private cloud (VPC) within a single AWS Region across multiple Availability Zones.
 
-![Quick Start Linux Bastion Design Architecture](https://github.com/spotinst/quickstart-spotinst-elastigroup-ecs/blob/master/architecture.png)
+![Spotinst Elastigroup for Amazon ECS architecture](https://d1.awsstatic.com/partner-network/QuickStart/datasheets/spotinst-elastigroup-for-amazon-ecs-architecture-diagram.png)
+
+To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
+
+If you'd like to submit code for this Quick Start, please review the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/).
