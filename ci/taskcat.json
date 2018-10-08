@@ -84,10 +84,6 @@
         "ParameterValue": "$[taskcat_random-string]"
     },
     {
-        "ParameterKey": "AutoScaleraEnable",
-        "ParameterValue": "true"
-    },
-    {
         "ParameterKey": "AutoScalerCooldown",
         "ParameterValue": "180"
     },
