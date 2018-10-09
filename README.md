@@ -9,7 +9,7 @@ Using a combination of automated Spot Instance management and the variety of ins
 
 This Quick Start uses AWS CloudFormation templates to deploy Spotinst Elastigroup for Amazon ECS into a virtual private cloud (VPC) within a single AWS Region across multiple Availability Zones.
 
-![Spotinst Elastigroup for Amazon ECS architecture](https://d1.awsstatic.com/partner-network/QuickStart/datasheets/spotinst-elastigroup-for-amazon-ecs-architecture-diagram.png)
+![Spotinst Elastigroup for Amazon ECS architecture](https://d0.awsstatic.com/partner-network/QuickStart/datasheets/spotinst-elastigroup-for-amazon-ecs-architecture-diagram.png)
 
 To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
 
