@@ -370,49 +370,52 @@
                 "AMZECSOTP": "amzn-ami-2018.03.a-amazon-ecs-optimized"
             },
             "us-east-2": {
-                "AMI": "ami-09a64272e7fe706b6"
+                "AMI": "ami-0307f7ccf6ea35750"
             },
             "us-east-1": {
-                "AMI": "ami-0b9a214f40c38d5eb"
+                "AMI": "ami-045f1b3f87ed83659"
             },
             "us-west-2": {
-                "AMI": "ami-00430184c7bb49914"
+                "AMI": "ami-01b70aea4161476b7"
             },
             "us-west-1": {
-                "AMI": "ami-0e7dd5fe55b87a5fe"
+                "AMI": "ami-0285183bbef6224bd"
             },
             "eu-west-3": {
-                "AMI": "ami-06b685336aa497c15"
+                "AMI": "ami-0f4738fbeb53e6c3a"
             },
             "eu-west-2": {
-                "AMI": "ami-0209769f0c963e791"
+                "AMI": "ami-01bee3897bba49d78"
             },
             "eu-west-1": {
-                "AMI": "ami-05b65c0f6a75c1c64"
+                "AMI": "ami-0627e141ce928067c"
             },
             "eu-central-1": {
-                "AMI": "ami-0bb804e8cd910a664"
+                "AMI": "ami-0eaa3baf6969912ba"
+            },
+            "eu-north-1": {
+                "AMI": "ami-03494b0c9e1c22492"
             },
             "ap-northeast-2": {
-                "AMI": "ami-0d947b1901b27a37c"
+                "AMI": "ami-00294948a592fc052"
             },
             "ap-northeast-1": {
-                "AMI": "ami-08681de00a0aae54f"
+                "AMI": "ami-05b296a384694dfa4"
             },
             "ap-southeast-2": {
-                "AMI": "ami-05b48eda7f92aadbe"
+                "AMI": "ami-02c73ee1100ce3e7a"
             },
             "ap-southeast-1": {
-                "AMI": "ami-0a3f70f0255af1d29"
+                "AMI": "ami-050865a806e0dae53"
             },
             "ca-central-1": {
-                "AMI": "ami-00d1bdbd447b5933a"
+                "AMI": "ami-0f552e0a86f08b660"
             },
             "ap-south-1": {
-                "AMI": "ami-0590d0dd683026eab"
+                "AMI": "ami-01ef9f6a829ae3956"
             },
             "sa-east-1": {
-                "AMI": "ami-01bca91ecf4c1f494"
+                "AMI": "ami-084b1eee100c102ee"
             }
         }
     },
