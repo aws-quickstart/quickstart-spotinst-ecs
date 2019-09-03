@@ -242,15 +242,15 @@
             "Type": "AWS::Lambda::Function",
             "Properties": {
                 "Handler": "index.handler",
-                "MemorySize": "128",
+                "MemorySize": 128,
                 "Role": {
                     "Fn::GetAtt": [
                         "CreateSpotinstLambdaRole",
                         "Arn"
                     ]
                 },
-                "Runtime": "nodejs6.10",
-                "Timeout": "120",
+                "Runtime": "nodejs8.10",
+                "Timeout": 120,
                 "Code": {
                     "S3Bucket": {
                         "Ref": "LambdaZipsBucket"
