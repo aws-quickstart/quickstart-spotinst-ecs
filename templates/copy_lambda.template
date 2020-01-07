@@ -129,7 +129,7 @@
             "Properties": {
                 "Description": "Copies objects from a source S3 bucket to a destination",
                 "Handler": "index.handler",
-                "Runtime": "python3.7",
+                "Runtime": "python2.7",
                 "Role": {
                     "Fn::GetAtt": [
                         "CopyZipsRole",
@@ -176,7 +176,7 @@
                                 "    timer = threading.Timer((context.get_remaining_time_in_millis() / 1000.00) - 0.5, timeout, args=[event, context])",
                                 "    timer.start()",
                                 "",
-                                "    print(('Received event: %s' % json.dumps(event)))",
+                                "    print('Received event: %s' % json.dumps(event))",
                                 "    status = cfnresponse.SUCCESS",
                                 "    try:",
                                 "        source_bucket = event['ResourceProperties']['SourceBucket']",
@@ -193,6 +193,7 @@
                                 "    finally:",
                                 "        timer.cancel()",
                                 "        cfnresponse.send(event, context, status, {}, None)",
+                                ""
                             ]
                         ]
                     }
@@ -248,7 +249,7 @@
                         "Arn"
                     ]
                 },
-                "Runtime": "nodejs12.x",
+                "Runtime": "nodejs8.10",
                 "Timeout": 120,
                 "Code": {
                     "S3Bucket": {
