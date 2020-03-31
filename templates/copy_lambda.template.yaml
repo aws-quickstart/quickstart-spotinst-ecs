@@ -33,7 +33,7 @@ Parameters:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/).
-    Default: quickstart-git2s3/
+    Default: quickstart-spotinst-ecs/
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
@@ -83,7 +83,7 @@ Resources:
                   - s3:PutObject
                   - s3:DeleteObject
                 Resource:
-                  - !Sub 'arn:${AWS::Partition}:s3:::${LambdaZipsBucket}-${AWS::Region}/${QSS3KeyPrefix}*'
+                  - !Sub 'arn:aws:s3:::${LambdaZipsBucket}/${QSS3KeyPrefix}*'
   CopyZipsFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -93,64 +93,49 @@ Resources:
       Role: !GetAtt 'CopyZipsRole.Arn'
       Timeout: 240
       Code:
-        ZipFile: !Join
-          - "\n"
-          - - import json
-            - import logging
-            - import threading
-            - import boto3
-            - import cfnresponse
-            - ''
-            - ''
-            - 'def copy_objects(source_bucket, dest_bucket, prefix, objects):'
-            - '    s3 = boto3.client(''s3'')'
-            - '    for o in objects:'
-            - '        key = prefix + o'
-            - '        copy_source = {'
-            - '            ''Bucket'': source_bucket,'
-            - '            ''Key'': key'
-            - '        }'
-            - '        s3.copy_object(CopySource=copy_source, Bucket=dest_bucket,
-              Key=key)'
-            - ''
-            - ''
-            - 'def delete_objects(bucket, prefix, objects):'
-            - '    s3 = boto3.client(''s3'')'
-            - '    objects = {''Objects'': [{''Key'': prefix + o} for o in objects]}'
-            - '    s3.delete_objects(Bucket=bucket, Delete=objects)'
-            - ''
-            - ''
-            - 'def timeout(event, context):'
-            - '    logging.error(''Execution is about to time out, sending failure
-              response to CloudFormation'')'
-            - '    cfnresponse.send(event, context, cfnresponse.FAILED, {}, None)'
-            - ''
-            - ''
-            - 'def handler(event, context):'
-            - '    # make sure we send a failure to CloudFormation if the function
-              is going to timeout'
-            - '    timer = threading.Timer((context.get_remaining_time_in_millis()
-              / 1000.00) - 0.5, timeout, args=[event, context])'
-            - '    timer.start()'
-            - ''
-            - '    print((''Received event: %s'' % json.dumps(event)))'
-            - '    status = cfnresponse.SUCCESS'
-            - '    try:'
-            - '        source_bucket = event[''ResourceProperties''][''SourceBucket'']'
-            - '        dest_bucket = event[''ResourceProperties''][''DestBucket'']'
-            - '        prefix = event[''ResourceProperties''][''Prefix'']'
-            - '        objects = event[''ResourceProperties''][''Objects'']'
-            - '        if event[''RequestType''] == ''Delete'':'
-            - '            delete_objects(dest_bucket, prefix, objects)'
-            - '        else:'
-            - '            copy_objects(source_bucket, dest_bucket, prefix, objects)'
-            - '    except Exception as e:'
-            - '        logging.error(''Exception: %s'' % e, exc_info=True)'
-            - '        status = cfnresponse.FAILED'
-            - '    finally:'
-            - '        timer.cancel()'
-            - '        cfnresponse.send(event, context, status, {}, None)'
-            - ''
+        ZipFile: |
+          import json
+          import logging
+          import threading
+          import boto3
+          import cfnresponse
+          def copy_objects(source_bucket, dest_bucket, prefix, objects):
+              s3 = boto3.client('s3')
+              for o in objects:
+                  key = prefix + o
+                  copy_source = {
+                      'Bucket': source_bucket,
+                      'Key': key
+                  }
+                  s3.copy_object(CopySource=copy_source, Bucket=dest_bucket, Key=key)
+          def delete_objects(bucket, prefix, objects):
+              s3 = boto3.client('s3')
+              objects = {'Objects': [{'Key': prefix + o} for o in objects]}
+              s3.delete_objects(Bucket=bucket, Delete=objects)
+          def timeout(event, context):
+              logging.error('Execution is about to time out, sending failure response to CloudFormation')
+              cfnresponse.send(event, context, cfnresponse.FAILED, {}, None)
+          def handler(event, context):
+              # make sure we send a failure to CloudFormation if the function is going to timeout
+              timer = threading.Timer((context.get_remaining_time_in_millis() / 1000.00) - 0.5, timeout, args=[event, context])
+              timer.start()
+              print('Received event: %s' % json.dumps(event))
+              status = cfnresponse.SUCCESS
+              try:
+                  source_bucket = event['ResourceProperties']['SourceBucket']
+                  dest_bucket = event['ResourceProperties']['DestBucket']
+                  prefix = event['ResourceProperties']['Prefix']
+                  objects = event['ResourceProperties']['Objects']
+                  if event['RequestType'] == 'Delete':
+                      delete_objects(dest_bucket, prefix, objects)
+                  else:
+                      copy_objects(source_bucket, dest_bucket, prefix, objects)
+              except Exception as e:
+                  logging.error('Exception: %s' % e, exc_info=True)
+                  status = cfnresponse.FAILED
+              finally:
+                  timer.cancel()
+                  cfnresponse.send(event, context, status, {}, None)
   CreateSpotinstLambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -180,7 +165,7 @@ Resources:
       Handler: index.handler
       MemorySize: 128
       Role: !GetAtt 'CreateSpotinstLambdaRole.Arn'
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       Timeout: 120
       Code:
         S3Bucket: !Ref 'LambdaZipsBucket'
