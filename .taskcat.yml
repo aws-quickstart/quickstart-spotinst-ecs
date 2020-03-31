@@ -1,0 +1,44 @@
+project:
+  name: quickstart-spotinst-ecs
+  owner: yuval@spotinst.com
+  package_lambda: false
+  regions:
+  - us-east-1
+  - us-west-2
+  s3_bucket: ''
+tests:
+  spotinst:
+    parameters:
+      AccessToken: override
+      AccountID: override
+      AutoScalerCooldown: '180'
+      AutoScalerEvaluationPeriods: '3'
+      AutoScalerHeadroomCPU: '0'
+      AutoScalerHeadroomRAM: '0'
+      AutoScalerHeadroomUnitCount: '0'
+      AvailabilityZones: $[taskcat_genaz_3]
+      BastionAMIOS: Amazon-Linux-HVM
+      BastionInstanceType: t2.micro
+      CapacityMax: '2'
+      CapacityMin: '0'
+      CapacityTarget: '1'
+      ClusterOrientation: balanced
+      CreatePrivateSubnets: 'true'
+      DetailedMonitoring: 'False'
+      ECSName: $[taskcat_random-string]
+      ElastigroupName: $[taskcat_random-string]
+      KeyPairName: taskcat-test
+      NewECS: New Cluster
+      NumberOfAZs: '3'
+      OnDemandInstanceType: t2.micro
+      ProductType: Linux/UNIX
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      RemoteAccessCIDR: 0.0.0.0/0
+      SpotInstancesType: m3.large,m4.large
+      SpotPercentage: '100'
+    regions:
+    - us-east-1
+    - us-west-2
+    s3_bucket: ''
+    template: templates/Elastigroup-ECS-Master.template.yaml
