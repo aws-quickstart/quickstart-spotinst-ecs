@@ -27,7 +27,7 @@ tests:
       DetailedMonitoring: 'False'
       ECSName: $[taskcat_random-string]
       ElastigroupName: $[taskcat_random-string]
-      KeyPairName: override
+      KeyPairName: $[taskcat_getkeypair]
       NewECS: New Cluster
       NumberOfAZs: '3'
       OnDemandInstanceType: t2.micro
