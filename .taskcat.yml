@@ -17,7 +17,7 @@ tests:
       AutoScalerHeadroomRAM: '0'
       AutoScalerHeadroomUnitCount: '0'
       AvailabilityZones: $[taskcat_genaz_3]
-      BastionAMIOS: Amazon-Linux-HVM
+      BastionAMIOS: Amazon-Linux2-HVM
       BastionInstanceType: t2.micro
       CapacityMax: '2'
       CapacityMin: '0'
